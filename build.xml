@@ -17,7 +17,7 @@
 		    :${launch4j.dir}/lib/xstream.jar" />
 <!--    <launch4j configFile="./l4j/SimpleApp.xml" />-->
         <launch4j>
-            <config headerType="gui" jar="dist/BiraNashira.jar" outfile="dist/BiraVeNashira.exe" errTitle="BiraNashira" chdir="." customProcName="true" icon="l4j/bira.ico" >
+            <config headerType="gui" jar="dist/BiraNashira.jar" outfile="dist/BiraNashira.exe" errTitle="BiraNashira" chdir="." customProcName="true" icon="l4j/music_saxophone.ico" >
 <!--                <singleInstance mutexName="net.sf.launch4j.example.ConsoleApp" />-->
                 <jre minVersion="1.5.0"  />
                 

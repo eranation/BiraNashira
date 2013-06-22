@@ -5,9 +5,6 @@
 package biranashira;
 
 import java.awt.ComponentOrientation;
-import java.awt.GraphicsDevice;
-import java.awt.GraphicsEnvironment;
-import javax.swing.JFrame;
 
 /**
  *
@@ -19,8 +16,7 @@ public class BiraNashira {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
-        
+
         try {
             javax.swing.UIManager.LookAndFeelInfo[] installedLookAndFeels = javax.swing.UIManager.getInstalledLookAndFeels();
             for (int idx = 0; idx < installedLookAndFeels.length; idx++) {
@@ -43,12 +39,12 @@ public class BiraNashira {
                 //mainWindow.applyComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
                 mainWindow.applyComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
                 mainWindow.setVisible(true);
-                
-                
+
+
 
             }
         });
-        
-        
+
+
     }
 }

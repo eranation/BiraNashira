@@ -6,25 +6,21 @@ package biranashira;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.GridLayout;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.beans.PropertyVetoException;
-import java.beans.VetoableChangeListener;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.GroupLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -36,6 +32,7 @@ import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
 import javax.swing.LayoutStyle;
+import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
 import javax.swing.table.DefaultTableModel;
@@ -57,23 +54,10 @@ public class MainWindow extends javax.swing.JFrame {
      */
     public MainWindow() {
         initComponents();
-        setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/biranashira/images/music_saxophone.png")));
-        model.addPropertyChangeListener(new PropertyChangeListener() {
+        ImageIcon img = new ImageIcon(getClass().getResource("/biranashira/images/music_saxophone.png"));
+        //Toolkit.getDefaultToolkit().getImage();
+        setIconImage(img.getImage());
 
-            @Override
-            public void propertyChange(PropertyChangeEvent evt) {
-                //not working as it's in the middle of an event, so it doesn't check the box back
-                //toggleShowLyrics(model.isShowLyricsOnSecondMonitor());
-//                try {
-//                    toggleShowLyrics(model.isShowSecondMonitor());
-//                } catch (PropertyVetoException ex) {
-//                    JOptionPane.showMessageDialog(null, "You don't seem to have a second monitor connected");
-//                    //Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
-//                }
-
-                
-            }
-        });
         final GraphicsEnvironment localGraphicsEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();
 
         GraphicsEnvironment ge = localGraphicsEnvironment;
@@ -85,14 +69,6 @@ public class MainWindow extends javax.swing.JFrame {
                 Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        
-        GraphicsDevice gd = localGraphicsEnvironment.getDefaultScreenDevice();
-        int width = gd.getDisplayMode().getWidth();
-        int height = gd.getDisplayMode().getHeight();
-
-
-
-
 
     }
 
@@ -121,12 +97,13 @@ public class MainWindow extends javax.swing.JFrame {
         jPanel2 = new JPanel();
         playListsScrolPanel = new JScrollPane();
         playListsTable = new JTable();
+        jLabel2 = new JLabel();
         jPanel1 = new JPanel();
         searchBox = new JPanel();
         jTextField1 = new JTextField();
         jLabel1 = new JLabel();
-        jScrollPane1 = new JScrollPane();
-        jTable1 = new JTable();
+        playListsScrolPanel1 = new JScrollPane();
+        playListsTable1 = new JTable();
 
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -207,25 +184,51 @@ public class MainWindow extends javax.swing.JFrame {
         jSplitPane2.setOrientation(JSplitPane.VERTICAL_SPLIT);
         jSplitPane2.setName("jSplitPane2"); // NOI18N
 
+        jPanel2.setMinimumSize(new Dimension(0, 200));
         jPanel2.setName("jPanel2"); // NOI18N
 
-        playListsScrolPanel.setBorder(null);
         playListsScrolPanel.setMinimumSize(new Dimension(21, 100));
         playListsScrolPanel.setName("playListsScrolPanel"); // NOI18N
 
         playListsTable.setModel(new DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "שם השיר", "אמן", "אלבום"
             }
-        ));
+        ) {
+            Class[] types = new Class [] {
+                String.class, String.class, String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        playListsTable.setColumnSelectionAllowed(true);
         playListsTable.setName("playListsTable"); // NOI18N
         playListsScrolPanel.setViewportView(playListsTable);
+        playListsTable.getColumnModel().getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        playListsTable.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("MainWindow.playListsTable.columnModel.title0_1")); // NOI18N
+        playListsTable.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("MainWindow.playListsTable.columnModel.title1_1")); // NOI18N
+        playListsTable.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("MainWindow.playListsTable.columnModel.title2_1")); // NOI18N
+
+        jLabel2.setFont(jLabel2.getFont().deriveFont(jLabel2.getFont().getStyle() | Font.BOLD, jLabel2.getFont().getSize()+3));
+        jLabel2.setText(bundle.getString("MainWindow.jLabel2.text")); // NOI18N
+        jLabel2.setName("jLabel2"); // NOI18N
 
         GroupLayout jPanel2Layout = new GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -233,14 +236,18 @@ public class MainWindow extends javax.swing.JFrame {
             jPanel2Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(playListsScrolPanel, GroupLayout.DEFAULT_SIZE, 578, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel2, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(playListsScrolPanel, GroupLayout.DEFAULT_SIZE, 578, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(playListsScrolPanel, GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)
+                .addComponent(jLabel2, GroupLayout.PREFERRED_SIZE, 30, GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(playListsScrolPanel, GroupLayout.DEFAULT_SIZE, 142, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -264,21 +271,43 @@ public class MainWindow extends javax.swing.JFrame {
         jLabel1.setName("jLabel1"); // NOI18N
         searchBox.add(jLabel1, BorderLayout.LINE_START);
 
-        jScrollPane1.setName("jScrollPane1"); // NOI18N
+        playListsScrolPanel1.setMinimumSize(new Dimension(21, 100));
+        playListsScrolPanel1.setName("playListsScrolPanel1"); // NOI18N
 
-        jTable1.setModel(new DefaultTableModel(
+        playListsTable1.setModel(new DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "שם השיר", "אמן", "אלבום"
             }
-        ));
-        jTable1.setName("jTable1"); // NOI18N
-        jScrollPane1.setViewportView(jTable1);
+        ) {
+            Class[] types = new Class [] {
+                String.class, String.class, String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        playListsTable1.setName("playListsTable1"); // NOI18N
+        playListsScrolPanel1.setViewportView(playListsTable1);
+        playListsTable1.getColumnModel().getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        playListsTable1.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("MainWindow.playListsTable.columnModel.title0_1")); // NOI18N
+        playListsTable1.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("MainWindow.playListsTable.columnModel.title1_1")); // NOI18N
+        playListsTable1.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("MainWindow.playListsTable.columnModel.title2_1")); // NOI18N
 
         GroupLayout jPanel1Layout = new GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -287,18 +316,18 @@ public class MainWindow extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, GroupLayout.DEFAULT_SIZE, 578, Short.MAX_VALUE)
-                    .addComponent(searchBox, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(searchBox, GroupLayout.DEFAULT_SIZE, 578, Short.MAX_VALUE)
+                    .addComponent(playListsScrolPanel1, GroupLayout.Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 578, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+            .addGroup(GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(searchBox, GroupLayout.PREFERRED_SIZE, 27, GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, GroupLayout.PREFERRED_SIZE, 108, GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(playListsScrolPanel1, GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         jSplitPane2.setRightComponent(jPanel1);
@@ -344,7 +373,7 @@ public class MainWindow extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jSplitPane1, GroupLayout.DEFAULT_SIZE, 451, Short.MAX_VALUE)
+                .addComponent(jSplitPane1, GroupLayout.DEFAULT_SIZE, 556, Short.MAX_VALUE)
                 .addGap(0, 0, 0))
         );
 
@@ -369,7 +398,6 @@ public class MainWindow extends javax.swing.JFrame {
             toggleShowLyrics(model.isShowSecondMonitor());
         } catch (PropertyVetoException ex) {
             JOptionPane.showMessageDialog(null, "You don't seem to have a second monitor connected");
-            //Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_showLyricsOnSecondScreenActionPerformed
     private LyricsWindow lyricsWindow = null;
@@ -403,12 +431,11 @@ public class MainWindow extends javax.swing.JFrame {
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private JLabel jLabel1;
+    private JLabel jLabel2;
     private JPanel jPanel1;
     private JPanel jPanel2;
-    private JScrollPane jScrollPane1;
     private JSplitPane jSplitPane1;
     private JSplitPane jSplitPane2;
-    private JTable jTable1;
     private JTextField jTextField1;
     private JToolBar jToolBar1;
     private JButton loadPlaylist;
@@ -416,7 +443,9 @@ public class MainWindow extends javax.swing.JFrame {
     private JButton newPlaylist;
     private JPanel otherActionsPanel;
     private JScrollPane playListsScrolPanel;
+    private JScrollPane playListsScrolPanel1;
     private JTable playListsTable;
+    private JTable playListsTable1;
     private JPanel playlistActionsPanel;
     private JButton savePlaylist;
     private JPanel searchBox;
