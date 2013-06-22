@@ -1,0 +1,22 @@
+<launch4jConfig>
+  <dontWrapJar>false</dontWrapJar>
+  <headerType>gui</headerType>
+  <jar>C:\Users\ehrannm\Documents\NetBeansProjects\BiraNashira\dist\BiraNashira.jar</jar>
+  <outfile>C:\Users\ehrannm\Desktop\BiraNashira.exe</outfile>
+  <errTitle></errTitle>
+  <cmdLine></cmdLine>
+  <chdir></chdir>
+  <priority>normal</priority>
+  <downloadUrl>http://java.com/download</downloadUrl>
+  <supportUrl></supportUrl>
+  <customProcName>false</customProcName>
+  <stayAlive>false</stayAlive>
+  <manifest></manifest>
+  <icon>C:\Users\ehrannm\Documents\NetBeansProjects\BiraNashira\src\biranashira\images\music_saxophone.png</icon>
+  <jre>
+    <path>C:\Program Files\Java\jdk1.7.0_21</path>
+    <minVersion>1.7.0</minVersion>
+    <maxVersion></maxVersion>
+    <jdkPreference>preferJre</jdkPreference>
+  </jre>
+</launch4jConfig>
